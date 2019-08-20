@@ -1,14 +1,15 @@
 from pyspark.sql.context import SQLContext
-
+from pyspark.java_gateway import ensure_callback_server_started
 from waimak.dataflowaction import DataFlowAction
 from waimak.transform import Transform1
 from py4j.java_gateway import JavaGateway, CallbackServerParameters
+
 
 class SparkDataFlow:
     def __init__(self, spark_session, _jsdf=None):
         self._jvm = spark_session._jvm
         self._gateway = spark_session.sparkContext._gateway
-        self._gateway.start_callback_server()
+        ensure_callback_server_started(self._gateway)
         self.spark_session = spark_session
         self.sql_context = SQLContext(spark_session.sparkContext, spark_session)
         if _jsdf is None:
