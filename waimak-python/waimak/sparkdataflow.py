@@ -2,7 +2,6 @@ from pyspark.sql.context import SQLContext
 from pyspark.java_gateway import ensure_callback_server_started
 from waimak.dataflowaction import DataFlowAction
 from waimak.transform import Transform1
-from py4j.java_gateway import JavaGateway, CallbackServerParameters
 
 
 class SparkDataFlow:
