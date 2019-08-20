@@ -28,3 +28,16 @@ class TestSparkDataFlow(TestCase):
         actions = flow.execute()
         self.assertEqual(len(actions), 1)
         self.assertEqual(actions[0].description(), 'Action: show Inputs: [in] Outputs: []')
+
+    def test_execute_flow_transform(self):
+        schema = StructType([StructField("name", StringType()), StructField("age", IntegerType())])
+        test_list = [['Bob', 33], ['James', 34]]
+
+        df = self.spark_session.createDataFrame(test_list, schema=schema)
+        flow = SparkDataFlow(self.spark_session)
+        flow.add_input("in", df)
+        flow.transform("in", "out", lambda df: df.groupBy("name").count())
+        flow.show("out")
+        actions = flow.execute()
+        self.assertEqual(len(actions), 2)
+        #self.assertEqual(actions[0].description(), 'Action: show Inputs: [in] Outputs: []')
