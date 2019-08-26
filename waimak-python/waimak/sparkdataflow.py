@@ -20,9 +20,9 @@ class SparkDataFlow:
         else:
             self._jsdf = _jsdf
         # Hack to get hold of DataFrame ClassTag object
-        self._jdf_classtag = self.__get_classtag_from_jobject(
-            self.sql_context.createDataFrame(self.spark_session.sparkContext.emptyRDD(),
-                                             StructType([]))._jdf)
+        empty_jdf = self.sql_context.createDataFrame(self.spark_session.sparkContext.emptyRDD(),
+                                                     StructType([]))._jdf
+        self._jdf_classtag = self.__get_classtag_from_jobject(empty_jdf)
 
     def __get_classtag_from_jobject(self, jobject):
         return getattr(getattr(self._jvm.scala.reflect, 'ClassTag$'), 'MODULE$').apply(jobject.getClass())
@@ -52,7 +52,7 @@ class SparkDataFlow:
 
     def debug_as_table(self, *labels):
         jlabels = self._jvm.PythonUtils.toSeq([l for l in labels])
-        self._jsdf = self._jsdf.debugAsTable(jlabels)
+        self._jsdf = self.__get_extension_object().debugAsTable(jlabels)
 
     def open(self, label, open_func):
         self._jsdf = self._jsdf.open(label, Function1(lambda _sfc: open_func(self.spark_session)._jdf))
