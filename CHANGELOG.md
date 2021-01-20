@@ -1,5 +1,43 @@
 # Changelog
 
+## 2.8.6 - 2020-12-05
+- Add spark 3 build and publish against spark 3, including new databricks jar
+
+## 2.8.5 - 2020-09-09
+
+### Fixed
+- Fixed a bug in the sql server temporal extractor where it would fail to extract from empty
+  tables.
+
+## 2.8.4 - 2020-09-08
+
+### Fixed
+- Optimise the sql server temporal extractor further to select the appropriate upper bound timestamp
+  when selecting from a history table. This should bring in less rows than before.
+
+## 2.8.3 - 2020-09-04
+
+### Fixed
+- Fix an issue with the sql server temporal extractor where rows were never being removed from storage, due to 
+  having a column added in error. Also try to improve the history query.
+
+## 2.8.2 - 2020-08-18
+
+### Fixed
+- Fixed a bug in the WriteAsNamedFilesAction
+
+## 2.8.1 - 2020-06-17
+
+### Fixed
+- Fixed a bug in the sql server temporal extractor, which caused extractions to not be isolated within a transaction
+
+## 2.8 - 2019-12-18
+
+### Changed
+- Delimiter for the Deequ `genericSQLCheck` changed from a comma to a semi-colon to allow for checks which have commas in them
+- `writeAsNamedFiles` now creates the destination directory before performing the write
+- Refactored internal scheduler code to make it more functional
+
 ## 2.7 - 2019-08-12
 
 ### Added
@@ -12,7 +50,7 @@
 ### Changed
 - Using F-bounded types on `DataFlow`
 - High-level storage layer API exposed outside of actions (in addition to existing actions)
-- Spark 2.4.3 now used for Scala 2.12 build (no longer experimnental)
+- Spark 2.4.3 now used for Scala 2.12 build (no longer experimental)
 
 ### Removed
 - waimak-rdbm-export and waimak-azure-table modules 
